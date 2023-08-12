@@ -8,17 +8,6 @@ import (
 
 type Protocol int32
 
-var Discovery = struct {
-	Endpoints []string
-	Namespace string
-	TTL       time.Duration
-	MaxRetry  int
-}{
-	Endpoints: []string{"localhost:2379"},
-	Namespace: "/cyan-pigeon/toktik/api",
-	TTL:       time.Second * 15,
-	MaxRetry:  5,
-}
 var Endpoint = struct {
 	Timeout  time.Duration
 	MaxRetry int

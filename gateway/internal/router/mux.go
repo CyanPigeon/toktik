@@ -44,7 +44,6 @@ type MuxRouter struct {
 	factory   endpoint.Factory
 	ctx       context.Context
 	cancel    context.CancelFunc
-	discovery discovery.Discovery
 	router    *mux.Router
 	mutex     sync.Mutex
 	semaphore *sync.WaitGroup
@@ -52,10 +51,9 @@ type MuxRouter struct {
 	nodes     map[string]*[]selector.Node
 }
 
-func New(ctx context.Context, discovery discovery.Discovery, factory endpoint.Factory, opts ...internal.OptionSetter[MuxRouter]) Router {
+func New(ctx context.Context, factory endpoint.Factory, opts ...internal.OptionSetter[MuxRouter]) Router {
 	r := &MuxRouter{
 		Interceptors: &interceptor.DefaultInterceptors{},
-		discovery:    discovery,
 		factory:      factory,
 		mutex:        sync.Mutex{},
 		semaphore:    &sync.WaitGroup{},

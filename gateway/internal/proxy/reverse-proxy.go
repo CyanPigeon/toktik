@@ -17,18 +17,11 @@ type ReverseProxyServer struct {
 	ctx       context.Context
 	router    router.Router
 	watcher   registry.Watcher
-	discovery discovery.Discovery
+	discovery registry.Discovery
 	server    *http.Server
 }
 
-type handler struct {
-}
-
-func (h handler) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
-	writer.WriteHeader(404)
-}
-
-func NewServer(ctx context.Context, discovery discovery.Discovery, router router.Router) (*ReverseProxyServer, error) {
+func NewServer(ctx context.Context, discovery registry.Discovery, router router.Router) (*ReverseProxyServer, error) {
 	server := &ReverseProxyServer{
 		ctx:       ctx,
 		router:    router,
@@ -55,7 +48,7 @@ func (t *ReverseProxyServer) tick() (err error) {
 			log.Errorf("node discovery loop start failed caused by: %+v", err)
 		}
 	}
-	t.watcher, err = t.discovery.Watch(t.ctx, discovery.DefaultServiceFilter)
+	t.watcher, err = t.discovery.Watch(t.ctx, "\"prefix\" in Meta and \"team=CyanPigeon\" in Tags")
 	if err != nil {
 		return err
 	}

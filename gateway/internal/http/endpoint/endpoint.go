@@ -178,5 +178,5 @@ func (t *action) forward(writer std.ResponseWriter, request *std.Request) (_ int
 		headers[std.TrailerPrefix+k] = v
 	}
 
-	return std.StatusOK, nil
+	return t.response.StatusCode, nil
 }
