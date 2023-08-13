@@ -25,16 +25,16 @@ func GenToken(cfg JWTConfig, uuid string) (string, error) {
 	return j.SignedString([]byte(cfg.Secret))
 }
 
-func ValidateToken(cfg JWTConfig, token string) (bool, error) {
+func ValidateToken(cfg JWTConfig, token string) (bool, JWTClaim, error) {
 	var j = new(JWTClaim)
 	t, err := jwt.ParseWithClaims(token, j, func(token *jwt.Token) (i interface{}, err error) {
 		return cfg.Secret, nil
 	})
 	if err != nil {
-		return false, err
+		return false, JWTClaim{}, err
 	}
 	if t.Valid {
-		return true, nil
+		return true, *j, nil
 	}
-	return false, errors.New("invalid token")
+	return false, JWTClaim{}, errors.New("invalid token")
 }
