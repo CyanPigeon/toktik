@@ -16,9 +16,7 @@ import (
 
 func initialization(ctx context.Context) (server http.Server, err error) {
 	selector.SetGlobalSelector(p2c.NewBuilder())
-	config := Consul.DefaultConfig()
-	//config.Address = "localhost:9630"
-	discovery, err := Discovery.New(config)
+	discovery, err := Discovery.New(Consul.DefaultConfig())
 	if err != nil {
 		return nil, fmt.Errorf("etcd client initialization failed: %+v", err)
 	}
