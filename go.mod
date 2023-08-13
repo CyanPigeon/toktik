@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/go-kratos/kratos/v2 v2.7.0
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/wire v0.5.0
 	github.com/gorilla/mux v1.8.0
 	github.com/hashicorp/consul/api v1.24.0
