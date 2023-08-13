@@ -6,6 +6,7 @@ import (
 	"github.com/CyanPigeon/toktik/gateway/internal/config"
 	"github.com/CyanPigeon/toktik/gateway/internal/http"
 	"github.com/CyanPigeon/toktik/gateway/internal/http/endpoint"
+	"github.com/CyanPigeon/toktik/gateway/internal/interceptors"
 	Proxy "github.com/CyanPigeon/toktik/gateway/internal/proxy"
 	Router "github.com/CyanPigeon/toktik/gateway/internal/router"
 	Discovery "github.com/CyanPigeon/toktik/middleware/discovery"
@@ -21,7 +22,14 @@ func initialization(ctx context.Context) (server http.Server, err error) {
 		return nil, fmt.Errorf("etcd client initialization failed: %+v", err)
 	}
 	transport := http.NewTransport()
-	router := Router.New(ctx, endpoint.NewEndpointFactory(transport))
+	router := Router.New(
+		ctx,
+		endpoint.NewEndpointFactory(transport),
+		Router.WithPreInterceptors(
+			interceptors.XForwardInterceptor,
+			interceptors.Authorization,
+		),
+	)
 	server, err = Proxy.NewServer(
 		ctx,
 		discovery,
