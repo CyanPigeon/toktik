@@ -20,6 +20,11 @@ import (
 	"sync"
 )
 
+func WithErrorWriter(writer http.ErrorWriter) internal.OptionSetter[MuxRouter] {
+	return func(t *MuxRouter) {
+		t.errorWriter = writer
+	}
+}
 func WithPreInterceptors(handlers ...interceptor.PreHandler) internal.OptionSetter[MuxRouter] {
 	return func(o *MuxRouter) {
 		if len(handlers) <= 0 {
@@ -41,19 +46,21 @@ func WithPostInterceptors(handlers ...interceptor.PostHandler) internal.OptionSe
 
 type MuxRouter struct {
 	interceptor.Interceptors
-	factory   endpoint.Factory
-	ctx       context.Context
-	cancel    context.CancelFunc
-	router    *mux.Router
-	mutex     sync.Mutex
-	semaphore *sync.WaitGroup
-	endpoints map[string]http.Endpoint
-	nodes     map[string]*[]selector.Node
+	errorWriter http.ErrorWriter
+	factory     endpoint.Factory
+	ctx         context.Context
+	cancel      context.CancelFunc
+	router      *mux.Router
+	mutex       sync.Mutex
+	semaphore   *sync.WaitGroup
+	endpoints   map[string]http.Endpoint
+	nodes       map[string]*[]selector.Node
 }
 
 func New(ctx context.Context, factory endpoint.Factory, opts ...internal.OptionSetter[MuxRouter]) Router {
 	r := &MuxRouter{
 		Interceptors: &interceptor.DefaultInterceptors{},
+		errorWriter:  http.NewErrorWriter(),
 		factory:      factory,
 		mutex:        sync.Mutex{},
 		semaphore:    &sync.WaitGroup{},
@@ -95,7 +102,7 @@ func (t *MuxRouter) Register(path string) error {
 	if !ok {
 		return errors.New("invalid path")
 	}
-	return t.register(t.factory(path), *nodes)
+	return t.register(t.factory(path, t.errorWriter), *nodes)
 }
 
 func (t *MuxRouter) Apply(nodes []discovery.Node) (err error) {
@@ -120,7 +127,7 @@ func (t *MuxRouter) Apply(nodes []discovery.Node) (err error) {
 		if ept, ok := endpoints[path]; ok {
 			err = t.register(ept, *ns)
 		} else {
-			err = t.register(t.factory(path), *ns)
+			err = t.register(t.factory(path, t.errorWriter), *ns)
 		}
 		if err != nil {
 			if config.Router.StopApplyWhenError {
@@ -144,13 +151,10 @@ func (t *MuxRouter) ServeHTTP(writer std.ResponseWriter, request *std.Request) {
 		buf := make([]byte, 64<<10)
 		n := runtime.Stack(buf, false)
 		log.Errorf("panic recovered: %s", buf[:n])
+		t.errorWriter.Write(writer, std.StatusInternalServerError, errors.New("500 Internal Server Error"))
 	}()
 	if t.router == nil {
-		writer.WriteHeader(std.StatusNotFound)
-		_, err := writer.Write([]byte("404 Page Not Found"))
-		if err != nil {
-			panic(err)
-		}
+		t.errorWriter.Write(writer, std.StatusNotFound, errors.New("404 Page Not Found"))
 		return
 	}
 	t.semaphore.Add(1)

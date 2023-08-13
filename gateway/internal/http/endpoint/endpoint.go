@@ -14,7 +14,7 @@ import (
 	std "net/http"
 )
 
-type Factory func(path string) http.Endpoint
+type Factory func(path string, errorWriter http.ErrorWriter) http.Endpoint
 type endpoint struct {
 	path        string
 	errorWriter http.ErrorWriter
@@ -24,10 +24,10 @@ type endpoint struct {
 }
 
 func NewEndpointFactory(transport http.Transport) Factory {
-	return func(path string) http.Endpoint {
+	return func(path string, errorWriter http.ErrorWriter) http.Endpoint {
 		return &endpoint{
 			path:        path,
-			errorWriter: http.NewErrorWriter(),
+			errorWriter: errorWriter,
 			transport:   transport,
 			selector:    selector.GlobalSelector().Build(),
 		}
