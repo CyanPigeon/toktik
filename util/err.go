@@ -2,11 +2,10 @@ package util
 
 import (
 	"encoding/json"
-	"errors"
-	e "playground/err"
+	"github.com/CyanPigeon/toktik/err"
 )
 
-type ErrorJson struct {
+type ErrorStruct struct {
 	StatusCode int    `json:"status_code,omitempty"`
 	StatusMsg  string `json:"status_msg,omitempty"`
 }
@@ -21,53 +20,46 @@ const (
 	InvalidRequest      = 301
 )
 
-func genErrorStruct(code int, err error) ErrorJson {
-	return ErrorJson{
-		StatusCode: code,
-		StatusMsg:  err.Error(),
+func genErrorStruct(err err.IError) ErrorStruct {
+	code := err.Code()
+	switch code {
+	case LoginRegisterFailed:
+		return ErrorStruct{
+			StatusCode: LoginRegisterFailed,
+			StatusMsg:  "login or register failed",
+		}
+	case Unauthorized:
+		return ErrorStruct{
+			StatusCode: Unauthorized,
+			StatusMsg:  "unauthorized",
+		}
+	case UserNotExist:
+		return ErrorStruct{
+			StatusCode: UserNotExist,
+			StatusMsg:  "user not exist",
+		}
+	case UserActionFailed:
+		return ErrorStruct{
+			StatusCode: UserActionFailed,
+			StatusMsg:  "user action failed",
+		}
+	case InvalidRequest:
+		return ErrorStruct{
+			StatusCode: InvalidRequest,
+			StatusMsg:  "invalid request",
+		}
+	default:
+		return ErrorStruct{
+			StatusCode: Unknown,
+			StatusMsg:  "unknown",
+		}
 	}
 }
 
-func GenErrorJson(err error) string {
-	if errors.Is(err, e.ErrAuthFailed{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(LoginRegisterFailed, err),
-		)
+func GenError(err err.IError) string {
+	if err != nil {
+		j, _ := json.Marshal(genErrorStruct(err))
 		return string(j)
 	}
-	if errors.Is(err, e.ErrInvalidAccount{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(LoginRegisterFailed, err),
-		)
-		return string(j)
-	}
-	if errors.Is(err, e.ErrBadRequest{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(InvalidRequest, err),
-		)
-		return string(j)
-	}
-	if errors.Is(err, e.ErrUserNotExist{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(UserNotExist, err),
-		)
-		return string(j)
-	}
-	if errors.Is(err, e.ErrUnauthorized{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(Unauthorized, err),
-		)
-		return string(j)
-	}
-	if errors.Is(err, e.ErrUserActionFailed{}) {
-		j, _ := json.Marshal(
-			genErrorStruct(UserActionFailed, err),
-		)
-		return string(j)
-	}
-
-	j, _ := json.Marshal(
-		genErrorStruct(Unknown, err),
-	)
-	return string(j)
+	return ""
 }
