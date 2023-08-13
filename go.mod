@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/go-kratos/kratos/v2 v2.6.2
+	github.com/golang-jwt/jwt/v5 v5.0.0
 	github.com/google/wire v0.5.0
 	go.uber.org/automaxprocs v1.5.3
 	google.golang.org/genproto v0.0.0-20220524023933-508584e28198
