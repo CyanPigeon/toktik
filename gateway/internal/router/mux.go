@@ -85,6 +85,7 @@ func (t *MuxRouter) register(endpoint http.Endpoint, nodes []selector.Node) erro
 
 	route := t.router.NewRoute().HandlerFunc(func(writer std.ResponseWriter, request *std.Request) {
 		endpoint.ServeHTTPEx(writer, request, t.Interceptors)
+		writer.WriteHeader(200)
 	})
 	if strings.HasSuffix(endpoint.Path(), "*") {
 		route = route.PathPrefix(strings.TrimRight(endpoint.Path(), "*"))
