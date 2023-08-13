@@ -1,7 +1,8 @@
 package http
 
 import (
-	"github.com/go-kratos/kratos/v2/log"
+	json2 "encoding/json"
+	"fmt"
 	"net/http"
 )
 
@@ -13,8 +14,18 @@ func NewErrorWriter() ErrorWriter {
 
 func (t *defaultErrorWriter) Write(writer http.ResponseWriter, status int, err error) {
 	writer.WriteHeader(status)
-	writer.Header().Set("Content-Type", "text/plain; charset=utf-8")
-	if _, e := writer.Write([]byte(err.Error())); e != nil {
-		log.Errorf("unexpected error when processing error: %v", e)
+	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
+	json, e := json2.Marshal(struct {
+		StatusCode int    `json:"status_code,omitempty"`
+		StatusMsg  string `json:"status_msg,omitempty"`
+	}{
+		StatusCode: 301,
+		StatusMsg:  err.Error(),
+	})
+	if e != nil {
+		panic(e)
+	}
+	if _, e = writer.Write(json); e != nil {
+		panic(fmt.Errorf("unexpected error when processing error: %+v", e))
 	}
 }
