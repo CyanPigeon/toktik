@@ -23,10 +23,13 @@ type DefaultInterceptors struct {
 func (t *DefaultInterceptors) PreHandle(ctx context.Context, request *http.Request, header *http.Header) *toktik.RequestInterruptError {
 	for i := len(t.Pre) - 1; i >= 0; i-- {
 		if err := ctx.Err(); err != nil {
-			return toktik.NewRequestInterruptError(http.StatusGatewayTimeout, kratos.GatewayTimeout(
-				"[Gateway] Timeout while preprocessing the request",
-				err.Error(),
-			))
+			return &toktik.RequestInterruptError{
+				Cause: kratos.GatewayTimeout(
+					"[Gateway] Timeout while preprocessing the request",
+					err.Error(),
+				),
+				Status: http.StatusGatewayTimeout,
+			}
 		} else if err := t.Pre[i](ctx, request, header); err != nil {
 			return err
 		}

@@ -120,7 +120,7 @@ func (t *action) forward(writer std.ResponseWriter, request *std.Request) (_ int
 
 	headers := writer.Header()
 	if e := t.PreHandle(ctx, request, &headers); e != nil {
-		return e.Status(), e.Cause()
+		return e.Status, e.Cause
 	}
 	// 需要将Host设置为目标微服务地址，否则会导致回环。
 	request.Host = request.URL.Host
