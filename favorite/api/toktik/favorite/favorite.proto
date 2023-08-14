@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option go_package = "favorite/api/toktik/favorite;favorite";
+import "api/toktik/common/video.proto";
+
+// 点赞操作
+service LikeAction {
+  rpc LikeActionSrv(LikeActionRequest) returns (LikeActionResponse) {
+    option (google.api.http) = {
+      post : "/douyin/favorite/action"
+      body : "*"
+    };
+  }
+}
+
+// 点赞列表
+service LikeList {
+  rpc LikeListSrv(LikeListRequest) returns (LikeListResponse) {
+    option (google.api.http) = {
+      get : "/douyin/favorite/list"
+    };
+  }
+}
+
+message LikeActionRequest {
+  string token = 1;      // 用户鉴权token
+  int64 video_id = 2;    // 视频id
+  int32 action_type = 3; // 1-点赞，2-取消点赞
+}
+
+message LikeActionResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+}
+
+message LikeListRequest {
+  int64 user_id = 1; // 用户id
+  string token = 2;  // 用户鉴权token
+}
+
+message LikeListResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  repeated Video video_list = 3;  // 用户点赞视频列表
+}

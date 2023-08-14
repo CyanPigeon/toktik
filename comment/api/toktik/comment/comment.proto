@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option go_package = "comment/api/toktik/comment;comment";
+import "api/toktik/common/comment.proto";
+
+// 发布评论
+service CommentAction{
+  rpc CommentActionSrv(CommentActionRequest) returns (CommentActionResponse){
+    option(google.api.http) = {
+      post:"/douyin/comment/action"
+      body:"*"
+    };
+  }
+}
+
+// 列出评论
+service CommentList{
+  rpc CommentListSrv(CommentListRequest) returns (CommentListResponse){
+    option(google.api.http) = {
+      get:"/douyin/comment/list"
+    };
+  }
+}
+
+message CommentActionRequest {
+  string token = 1;      // 用户鉴权token
+  int64 video_id = 2;    // 视频id
+  int32 action_type = 3; // 1-发布评论，2-删除评论
+  optional string comment_text = 4; // 用户填写的评论内容，在action_type=1的时候使用
+  optional int64 comment_id = 5; // 要删除的评论id，在action_type=2的时候使用
+}
+
+message CommentActionResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  optional Comment comment = 3; // 评论成功返回评论内容，不需要重新拉取整个列表
+}
+
+message CommentListRequest {
+  string token = 1;   // 用户鉴权token
+  int64 video_id = 2; // 视频id
+}
+
+message CommentListResponse {
+  int32 status_code = 1;             // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2;    // 返回状态描述
+  repeated Comment comment_list = 3; // 评论列表
+}
