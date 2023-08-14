@@ -14,7 +14,7 @@ var cfg = jwtConfig{
 }
 
 type JWTClaim struct {
-	UUID int64
+	UUID int64 `json:"uuid"`
 	jwt.RegisteredClaims
 }
 
@@ -26,9 +26,9 @@ func GenToken(uuid int64) (string, error) {
 }
 
 func ValidateToken(token string) (bool, JWTClaim, error) {
-	var j = new(JWTClaim)
-	t, err := jwt.ParseWithClaims(token, j, func(token *jwt.Token) (i interface{}, err error) {
-		return cfg.Secret, nil
+	j := &JWTClaim{}
+	t, err := jwt.ParseWithClaims(token, j, func(token *jwt.Token) (interface{}, error) {
+		return []byte(cfg.Secret), nil
 	})
 	if err != nil {
 		return false, JWTClaim{}, err
