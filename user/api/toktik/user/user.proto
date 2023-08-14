@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+
+option go_package = "user/api/toktik/user;user";
+import "api/toktik/common/user.proto";
+
+// 用户信息
+service UserInfo {
+  rpc UserInfoSrv(UserInfoRequest) returns (UserInfoResponse) {
+    option (google.api.http) = {
+      get : "/douyin/user"
+    };
+  }
+}
+
+// 用户登录
+service UserLogin {
+  rpc UserLoginSrv(UserLoginRequest) returns (UserLoginResponse) {
+    option (google.api.http) = {
+      post : "/douyin/user/login"
+      body : "*"
+    };
+  }
+}
+
+// 用户注册
+service UserRegister {
+  rpc UserRegisterSrv(UserRegisterRequest) returns (UserRegisterResponse) {
+    option (google.api.http) = {
+      post : "/douyin/user/register"
+      body : "*"
+    };
+  }
+}
+
+message UserInfoRequest {
+  int64 user_id = 1; // 用户id
+  string token = 2;  // 用户鉴权token
+}
+
+message UserInfoResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  User user = 3;                  // 用户信息
+}
+
+message UserLoginRequest {
+  string username = 1; // 登录用户名
+  string password = 2; // 登录密码
+}
+
+message UserLoginResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  int64 user_id = 3;              // 用户id
+  string token = 4;               // 用户鉴权token
+}
+
+message UserRegisterRequest {
+  string username = 1; // 注册用户名，最长32个字符
+  string password = 2; // 密码，最长32个字符
+}
+
+message UserRegisterResponse {
+  int32 status_code = 1;          // 状态码，0-成功，其他值-失败
+  optional string status_msg = 2; // 返回状态描述
+  int64 user_id = 3;              // 用户id
+  string token = 4;               // 用户鉴权token
+}
