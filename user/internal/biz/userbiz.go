@@ -93,7 +93,7 @@ func (u *UserServiceBizImpl) UserLoginSrv(ctx context.Context, req *pb.UserLogin
 		}, nil
 	}
 	p, err := util.AESDecrypt(first.Password)
-	if first.Password != p || err != nil {
+	if req.Password != p || err != nil {
 		return pb.UserLoginResponse{
 			StatusCode: 101,
 			StatusMsg:  &em,
@@ -125,8 +125,8 @@ func (u *UserServiceBizImpl) UserInfoSrv(ctx context.Context, req *pb.UserInfoRe
 			User: &common.User{
 				Id:              first.UID,
 				Name:            first.Username,
-				FollowCount:     &first.FellowCount,
-				FollowerCount:   &first.FellowerCount,
+				FollowCount:     &first.FollowCount,
+				FollowerCount:   &first.FollowerCount,
 				IsFollow:        false,
 				Avatar:          &first.Avatar,
 				BackgroundImage: &first.BackgroundImg,
@@ -146,8 +146,8 @@ func (u *UserServiceBizImpl) UserInfoSrv(ctx context.Context, req *pb.UserInfoRe
 		User: &common.User{
 			Id:              first.UID,
 			Name:            first.Username,
-			FollowCount:     &first.FellowCount,
-			FollowerCount:   &first.FellowerCount,
+			FollowCount:     &first.FollowCount,
+			FollowerCount:   &first.FollowerCount,
 			IsFollow:        err == nil && c > 0,
 			Avatar:          &first.Avatar,
 			BackgroundImage: &first.BackgroundImg,

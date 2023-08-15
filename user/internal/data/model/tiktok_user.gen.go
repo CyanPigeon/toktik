@@ -18,8 +18,8 @@ type User struct {
 	Avatar         string    `gorm:"column:avatar;not null;comment:头像;头像地址，有默认头像" json:"avatar"`                   // 头像;头像地址，有默认头像
 	BackgroundImg  string    `gorm:"column:background_img;not null;comment:背景图片;有默认地址" json:"background_img"`      // 背景图片;有默认地址
 	TotalFavorited int64     `gorm:"column:total_favorited;not null;comment:总获赞数;被点赞数" json:"total_favorited"`     // 总获赞数;被点赞数
-	FellowCount    int64     `gorm:"column:fellow_count;not null;comment:关注人数;关注数量，默认0" json:"fellow_count"`       // 关注人数;关注数量，默认0
-	FellowerCount  int64     `gorm:"column:fellower_count;not null;comment:被关注人数;被关注数量，默认0" json:"fellower_count"` // 被关注人数;被关注数量，默认0
+	FollowCount    int64     `gorm:"column:follow_count;not null;comment:关注人数;关注数量，默认0" json:"follow_count"`       // 关注人数;关注数量，默认0
+	FollowerCount  int64     `gorm:"column:follower_count;not null;comment:被关注人数;被关注数量，默认0" json:"follower_count"` // 被关注人数;被关注数量，默认0
 	VideoCount     int64     `gorm:"column:video_count;not null;comment:作品数量;作品数量，默认0" json:"video_count"`         // 作品数量;作品数量，默认0
 	FavoriteCount  int64     `gorm:"column:favorite_count;not null;comment:总点赞数;总点赞数" json:"favorite_count"`       // 总点赞数;总点赞数
 	Signature      string    `gorm:"column:signature;not null;comment:个人简介;个人简介" json:"signature"`                 // 个人简介;个人简介

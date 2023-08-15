@@ -10,16 +10,16 @@ import (
 
 var sferr = util.SnowflakeInit(0)
 
-type UserRegisterService struct {
-	biz.UserServiceBizImpl
+type RegisterService struct {
+	b *biz.UserServiceBizImpl
 	pb.UnimplementedUserRegisterServer
 }
 
-func NewUserRegisterService() *UserRegisterService {
-	return &UserRegisterService{}
+func NewUserRegisterService(bizsrv *biz.UserServiceBizImpl) *RegisterService {
+	return &RegisterService{b: bizsrv}
 }
 
-func (s *UserRegisterService) UserRegisterSrv(ctx context.Context, req *pb.UserRegisterRequest) (*pb.UserRegisterResponse, error) {
-	srv, _ := s.UserRegisterSrv(ctx, req)
-	return srv, nil
+func (s *RegisterService) UserRegisterSrv(ctx context.Context, req *pb.UserRegisterRequest) (*pb.UserRegisterResponse, error) {
+	srv, _ := s.b.UserRegisterSrv(ctx, req)
+	return &srv, nil
 }
