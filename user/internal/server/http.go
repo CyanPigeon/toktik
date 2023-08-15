@@ -1,10 +1,9 @@
 package server
 
 import (
-	v1 "user/api/helloworld/v1"
 	"user/api/toktik/user"
 	"user/internal/conf"
-	"user/internal/service"
+	user2 "user/internal/service/user"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -12,7 +11,7 @@ import (
 )
 
 // NewHTTPServer new an HTTP server.
-func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.Logger) *http.Server {
+func NewHTTPServer(c *conf.Server, userLoginSrv *user2.UserLoginService, userRegisterSrv *user2.UserRegisterService, logger log.Logger) *http.Server {
 	var opts = []http.ServerOption{
 		http.Middleware(
 			recovery.Recovery(),
@@ -28,9 +27,7 @@ func NewHTTPServer(c *conf.Server, greeter *service.GreeterService, logger log.L
 		opts = append(opts, http.Timeout(c.Http.Timeout.AsDuration()))
 	}
 	srv := http.NewServer(opts...)
-	v1.RegisterGreeterHTTPServer(srv, greeter)
-	user.RegisterUserLoginHTTPServer(srv, service.NewUserLoginService())
-	user.RegisterUserRegisterHTTPServer(srv, service.NewUserRegisterService())
-	user.RegisterUserInfoHTTPServer(srv, service.NewUserInfoService())
+	user.RegisterUserLoginHTTPServer(srv, userLoginSrv)
+	user.RegisterUserRegisterHTTPServer(srv, userRegisterSrv)
 	return srv
 }
