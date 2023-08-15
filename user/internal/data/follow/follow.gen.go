@@ -16,7 +16,7 @@ import (
 
 	"gorm.io/plugin/dbresolver"
 
-	"user/cmd/gen/internal/data/model"
+	"user/internal/data/model"
 )
 
 func newFollow(db *gorm.DB, opts ...gen.DOOption) follow {

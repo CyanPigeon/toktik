@@ -6,16 +6,16 @@ import (
 	"user/internal/biz"
 )
 
-type UserInfoService struct {
+type InfoService struct {
+	b *biz.UserServiceBizImpl
 	pb.UnimplementedUserInfoServer
-	*biz.UserServiceBizImpl
 }
 
-func NewUserInfoService() *UserInfoService {
-	return &UserInfoService{}
+func NewUserInfoService(bizsrv *biz.UserServiceBizImpl) *InfoService {
+	return &InfoService{b: bizsrv}
 }
 
-func (s *UserInfoService) UserInfoSrv(ctx context.Context, req *pb.UserInfoRequest) (*pb.UserInfoResponse, error) {
-	srv, _ := s.UserInfoSrv(ctx, req)
-	return srv, nil
+func (s *InfoService) UserInfoSrv(ctx context.Context, req *pb.UserInfoRequest) (*pb.UserInfoResponse, error) {
+	srv, _ := s.b.UserInfoSrv(ctx, req)
+	return &srv, nil
 }

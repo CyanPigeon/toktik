@@ -3,7 +3,7 @@ package server
 import (
 	"user/api/toktik/user"
 	"user/internal/conf"
-	user2 "user/internal/service/user"
+	usvr "user/internal/service/user"
 
 	"github.com/go-kratos/kratos/v2/log"
 	"github.com/go-kratos/kratos/v2/middleware/recovery"
@@ -11,7 +11,7 @@ import (
 )
 
 // NewGRPCServer new a gRPC server.
-func NewGRPCServer(c *conf.Server, userLoginSrv *user2.UserLoginService, userRegisterSrv *user2.UserRegisterService, logger log.Logger) *grpc.Server {
+func NewGRPCServer(c *conf.Server, userLoginSrv *usvr.LoginService, userRegisterSrv *usvr.RegisterService, userInfoSrv *usvr.InfoService, logger log.Logger) *grpc.Server {
 	var opts = []grpc.ServerOption{
 		grpc.Middleware(
 			recovery.Recovery(),
@@ -29,5 +29,6 @@ func NewGRPCServer(c *conf.Server, userLoginSrv *user2.UserLoginService, userReg
 	srv := grpc.NewServer(opts...)
 	user.RegisterUserLoginServer(srv, userLoginSrv)
 	user.RegisterUserRegisterServer(srv, userRegisterSrv)
+	user.RegisterUserInfoServer(srv, userInfoSrv)
 	return srv
 }

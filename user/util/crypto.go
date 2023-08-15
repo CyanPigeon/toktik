@@ -14,7 +14,7 @@ type cryptoConfig struct {
 }
 
 var cfg = cryptoConfig{
-	Key: []byte("CyanPigeon"),
+	Key: []byte("000CyanPigeon000"),
 }
 
 func AESEncrypt(s string) (string, error) {
@@ -38,21 +38,16 @@ func AESDecrypt(s string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-
 	block, err := aes.NewCipher(cfg.Key)
 	if err != nil {
 		return "", err
 	}
-
 	if len(cipherText) < aes.BlockSize {
 		return "", fmt.Errorf("invalid ciphertext block size")
 	}
-
 	iv := cipherText[:aes.BlockSize]
 	cipherText = cipherText[aes.BlockSize:]
-
 	stream := cipher.NewCFBDecrypter(block, iv)
 	stream.XORKeyStream(cipherText, cipherText)
-
 	return string(cipherText), nil
 }

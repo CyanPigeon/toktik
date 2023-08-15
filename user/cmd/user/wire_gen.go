@@ -9,7 +9,11 @@ package main
 import (
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/log"
+	"user/internal/biz"
 	"user/internal/conf"
+	"user/internal/data"
+	"user/internal/server"
+	"user/internal/service/user"
 )
 
 import (
@@ -20,22 +24,22 @@ import (
 
 // wireApp init kratos application.
 func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*kratos.App, func(), error) {
-	/*	db, err := data.NewGormDB(confData)
-		if err != nil {
-			return nil, nil, err
-		}
-		dataData, cleanup, err := data.NewData(confData, db, logger)
-		if err != nil {
-			return nil, nil, err
-		}
-		dizCommentServiceImpl := comment.NewDizCommentServiceImpl(dataData)
-		commentActionService := service.NewCommentActionService(dizCommentServiceImpl)
-		commentListService := service.NewCommentListService(dizCommentServiceImpl)
-		grpcServer := server.NewGRPCServer(confServer, commentActionService, commentListService, logger)
-		httpServer := server.NewHTTPServer(confServer, commentActionService, commentListService, logger)
-		app := newApp(logger, grpcServer, httpServer)
-		return app, func() {
-			cleanup()
-		}, nil*/
-
+	db, err := data.NewGormDB(confData)
+	if err != nil {
+		return nil, nil, err
+	}
+	dataData, cleanup, err := data.NewData(confData, db, logger)
+	if err != nil {
+		return nil, nil, err
+	}
+	userServiceBizImpl := biz.NewUserServiceImpl(dataData)
+	loginService := user.NewUserLoginService(userServiceBizImpl)
+	registerService := user.NewUserRegisterService(userServiceBizImpl)
+	infoService := user.NewUserInfoService(userServiceBizImpl)
+	grpcServer := server.NewGRPCServer(confServer, loginService, registerService, infoService, logger)
+	httpServer := server.NewHTTPServer(confServer, loginService, registerService, infoService, logger)
+	app := newApp(logger, grpcServer, httpServer)
+	return app, func() {
+		cleanup()
+	}, nil
 }

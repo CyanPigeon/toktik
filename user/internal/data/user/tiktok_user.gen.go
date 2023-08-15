@@ -33,8 +33,8 @@ func newUser(db *gorm.DB, opts ...gen.DOOption) user {
 	_user.Avatar = field.NewString(tableName, "avatar")
 	_user.BackgroundImg = field.NewString(tableName, "background_img")
 	_user.TotalFavorited = field.NewInt64(tableName, "total_favorited")
-	_user.FellowCount = field.NewInt64(tableName, "fellow_count")
-	_user.FellowerCount = field.NewInt64(tableName, "fellower_count")
+	_user.FollowCount = field.NewInt64(tableName, "follow_count")
+	_user.FollowerCount = field.NewInt64(tableName, "follower_count")
 	_user.VideoCount = field.NewInt64(tableName, "video_count")
 	_user.FavoriteCount = field.NewInt64(tableName, "favorite_count")
 	_user.Signature = field.NewString(tableName, "signature")
@@ -59,8 +59,8 @@ type user struct {
 	Avatar         field.String // 头像;头像地址，有默认头像
 	BackgroundImg  field.String // 背景图片;有默认地址
 	TotalFavorited field.Int64  // 总获赞数;被点赞数
-	FellowCount    field.Int64  // 关注人数;关注数量，默认0
-	FellowerCount  field.Int64  // 被关注人数;被关注数量，默认0
+	FollowCount    field.Int64  // 关注人数;关注数量，默认0
+	FollowerCount  field.Int64  // 被关注人数;被关注数量，默认0
 	VideoCount     field.Int64  // 作品数量;作品数量，默认0
 	FavoriteCount  field.Int64  // 总点赞数;总点赞数
 	Signature      field.String // 个人简介;个人简介
@@ -91,8 +91,8 @@ func (u *user) updateTableName(table string) *user {
 	u.Avatar = field.NewString(table, "avatar")
 	u.BackgroundImg = field.NewString(table, "background_img")
 	u.TotalFavorited = field.NewInt64(table, "total_favorited")
-	u.FellowCount = field.NewInt64(table, "fellow_count")
-	u.FellowerCount = field.NewInt64(table, "fellower_count")
+	u.FollowCount = field.NewInt64(table, "follow_count")
+	u.FollowerCount = field.NewInt64(table, "follower_count")
 	u.VideoCount = field.NewInt64(table, "video_count")
 	u.FavoriteCount = field.NewInt64(table, "favorite_count")
 	u.Signature = field.NewString(table, "signature")
@@ -132,8 +132,8 @@ func (u *user) fillFieldMap() {
 	u.fieldMap["avatar"] = u.Avatar
 	u.fieldMap["background_img"] = u.BackgroundImg
 	u.fieldMap["total_favorited"] = u.TotalFavorited
-	u.fieldMap["fellow_count"] = u.FellowCount
-	u.fieldMap["fellower_count"] = u.FellowerCount
+	u.fieldMap["follow_count"] = u.FollowCount
+	u.fieldMap["follower_count"] = u.FollowerCount
 	u.fieldMap["video_count"] = u.VideoCount
 	u.fieldMap["favorite_count"] = u.FavoriteCount
 	u.fieldMap["signature"] = u.Signature

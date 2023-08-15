@@ -6,16 +6,16 @@ import (
 	"user/internal/biz"
 )
 
-type UserLoginService struct {
-	*biz.UserServiceBizImpl
+type LoginService struct {
+	b *biz.UserServiceBizImpl
 	pb.UnimplementedUserLoginServer
 }
 
-func NewUserLoginService() *UserLoginService {
-	return &UserLoginService{}
+func NewUserLoginService(bizsrv *biz.UserServiceBizImpl) *LoginService {
+	return &LoginService{b: bizsrv}
 }
 
-func (s *UserLoginService) UserLoginSrv(ctx context.Context, req *pb.UserLoginRequest) (*pb.UserLoginResponse, error) {
-	srv, _ := s.UserLoginSrv(ctx, req)
-	return srv, nil
+func (s *LoginService) UserLoginSrv(ctx context.Context, req *pb.UserLoginRequest) (*pb.UserLoginResponse, error) {
+	srv, _ := s.b.UserLoginSrv(ctx, req)
+	return &srv, nil
 }
