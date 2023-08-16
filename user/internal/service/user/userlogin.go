@@ -16,6 +16,6 @@ func NewUserLoginService(bizsrv *biz.UserServiceBizImpl) *LoginService {
 }
 
 func (s *LoginService) UserLoginSrv(ctx context.Context, req *pb.UserLoginRequest) (*pb.UserLoginResponse, error) {
-	srv, _ := s.b.UserLoginSrv(ctx, req)
-	return &srv, nil
+	service, _ := s.b.UserLoginService(ctx, req)
+	return &service, nil
 }

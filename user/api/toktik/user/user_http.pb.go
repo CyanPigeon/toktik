@@ -19,7 +19,7 @@ var _ = binding.EncodeURL
 
 const _ = http.SupportPackageIsVersion1
 
-const OperationUserInfoUserInfoSrv = "/UserInfo/UserInfoSrv"
+const OperationUserInfoUserInfoSrv = "/UserInfo/UserInfoService"
 
 type UserInfoHTTPServer interface {
 	UserInfoSrv(context.Context, *UserInfoRequest) (*UserInfoResponse, error)
@@ -74,7 +74,7 @@ func (c *UserInfoHTTPClientImpl) UserInfoSrv(ctx context.Context, in *UserInfoRe
 	return &out, err
 }
 
-const OperationUserLoginUserLoginSrv = "/UserLogin/UserLoginSrv"
+const OperationUserLoginUserLoginSrv = "/UserLogin/UserLoginService"
 
 type UserLoginHTTPServer interface {
 	UserLoginSrv(context.Context, *UserLoginRequest) (*UserLoginResponse, error)
@@ -132,7 +132,7 @@ func (c *UserLoginHTTPClientImpl) UserLoginSrv(ctx context.Context, in *UserLogi
 	return &out, err
 }
 
-const OperationUserRegisterUserRegisterSrv = "/UserRegister/UserRegisterSrv"
+const OperationUserRegisterUserRegisterSrv = "/UserRegister/UserRegisterService"
 
 type UserRegisterHTTPServer interface {
 	UserRegisterSrv(context.Context, *UserRegisterRequest) (*UserRegisterResponse, error)

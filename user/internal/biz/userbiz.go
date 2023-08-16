@@ -13,9 +13,9 @@ import (
 )
 
 type UserServiceBiz interface {
-	UserRegisterSrv(ctx context.Context, req *pb.UserRegisterRequest) (pb.UserRegisterResponse, error)
-	UserLoginSrv(ctx context.Context, req *pb.UserLoginRequest) (pb.UserLoginResponse, error)
-	UserInfoSrv(ctx context.Context, req *pb.UserInfoRequest) (pb.UserInfoResponse, error)
+	UserRegisterService(ctx context.Context, req *pb.UserRegisterRequest) (pb.UserRegisterResponse, error)
+	UserLoginService(ctx context.Context, req *pb.UserLoginRequest) (pb.UserLoginResponse, error)
+	UserInfoService(ctx context.Context, req *pb.UserInfoRequest) (pb.UserInfoResponse, error)
 }
 
 type UserServiceBizImpl struct {
@@ -28,7 +28,7 @@ func NewUserServiceImpl(db *data.Data) *UserServiceBizImpl {
 		db: db,
 	}
 }
-func (u *UserServiceBizImpl) UserRegisterSrv(ctx context.Context, req *pb.UserRegisterRequest) (pb.UserRegisterResponse, error) {
+func (u *UserServiceBizImpl) UserRegisterService(ctx context.Context, req *pb.UserRegisterRequest) (pb.UserRegisterResponse, error) {
 	paramsOk := util.ValidateParams([]string{req.Username, req.Password})
 	em := "invalid username or password"
 	if !paramsOk {
@@ -75,7 +75,7 @@ func (u *UserServiceBizImpl) UserRegisterSrv(ctx context.Context, req *pb.UserRe
 	}, nil
 }
 
-func (u *UserServiceBizImpl) UserLoginSrv(ctx context.Context, req *pb.UserLoginRequest) (pb.UserLoginResponse, error) {
+func (u *UserServiceBizImpl) UserLoginService(ctx context.Context, req *pb.UserLoginRequest) (pb.UserLoginResponse, error) {
 	paramsOk := util.ValidateParams([]string{req.Username, req.Password})
 	em := "invalid username or password"
 	if !paramsOk {
@@ -107,7 +107,7 @@ func (u *UserServiceBizImpl) UserLoginSrv(ctx context.Context, req *pb.UserLogin
 	}, nil
 }
 
-func (u *UserServiceBizImpl) UserInfoSrv(ctx context.Context, req *pb.UserInfoRequest) (pb.UserInfoResponse, error) {
+func (u *UserServiceBizImpl) UserInfoService(ctx context.Context, req *pb.UserInfoRequest) (pb.UserInfoResponse, error) {
 	v, j, _ := middleware.ValidateToken(req.Token)
 	q := userDao.Q.WithContext(ctx).User
 	first, err := q.Where(userDao.Q.User.UID.Eq(req.UserId)).First()

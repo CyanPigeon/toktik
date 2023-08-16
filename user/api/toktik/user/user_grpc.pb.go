@@ -19,7 +19,7 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	UserInfo_UserInfoSrv_FullMethodName = "/UserInfo/UserInfoSrv"
+	UserInfo_UserInfoSrv_FullMethodName = "/UserInfo/UserInfoService"
 )
 
 // UserInfoClient is the client API for UserInfo service.
@@ -59,7 +59,7 @@ type UnimplementedUserInfoServer struct {
 }
 
 func (UnimplementedUserInfoServer) UserInfoSrv(context.Context, *UserInfoRequest) (*UserInfoResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserInfoSrv not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method UserInfoService not implemented")
 }
 func (UnimplementedUserInfoServer) mustEmbedUnimplementedUserInfoServer() {}
 
@@ -100,7 +100,7 @@ var UserInfo_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserInfoServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserInfoSrv",
+			MethodName: "UserInfoService",
 			Handler:    _UserInfo_UserInfoSrv_Handler,
 		},
 	},
@@ -109,7 +109,7 @@ var UserInfo_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	UserLogin_UserLoginSrv_FullMethodName = "/UserLogin/UserLoginSrv"
+	UserLogin_UserLoginSrv_FullMethodName = "/UserLogin/UserLoginService"
 )
 
 // UserLoginClient is the client API for UserLogin service.
@@ -149,7 +149,7 @@ type UnimplementedUserLoginServer struct {
 }
 
 func (UnimplementedUserLoginServer) UserLoginSrv(context.Context, *UserLoginRequest) (*UserLoginResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserLoginSrv not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method UserLoginService not implemented")
 }
 func (UnimplementedUserLoginServer) mustEmbedUnimplementedUserLoginServer() {}
 
@@ -190,7 +190,7 @@ var UserLogin_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserLoginServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserLoginSrv",
+			MethodName: "UserLoginService",
 			Handler:    _UserLogin_UserLoginSrv_Handler,
 		},
 	},
@@ -199,7 +199,7 @@ var UserLogin_ServiceDesc = grpc.ServiceDesc{
 }
 
 const (
-	UserRegister_UserRegisterSrv_FullMethodName = "/UserRegister/UserRegisterSrv"
+	UserRegister_UserRegisterSrv_FullMethodName = "/UserRegister/UserRegisterService"
 )
 
 // UserRegisterClient is the client API for UserRegister service.
@@ -239,7 +239,7 @@ type UnimplementedUserRegisterServer struct {
 }
 
 func (UnimplementedUserRegisterServer) UserRegisterSrv(context.Context, *UserRegisterRequest) (*UserRegisterResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method UserRegisterSrv not implemented")
+	return nil, status.Errorf(codes.Unimplemented, "method UserRegisterService not implemented")
 }
 func (UnimplementedUserRegisterServer) mustEmbedUnimplementedUserRegisterServer() {}
 
@@ -280,7 +280,7 @@ var UserRegister_ServiceDesc = grpc.ServiceDesc{
 	HandlerType: (*UserRegisterServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "UserRegisterSrv",
+			MethodName: "UserRegisterService",
 			Handler:    _UserRegister_UserRegisterSrv_Handler,
 		},
 	},

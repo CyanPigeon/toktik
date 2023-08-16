@@ -16,6 +16,6 @@ func NewUserInfoService(bizsrv *biz.UserServiceBizImpl) *InfoService {
 }
 
 func (s *InfoService) UserInfoSrv(ctx context.Context, req *pb.UserInfoRequest) (*pb.UserInfoResponse, error) {
-	srv, _ := s.b.UserInfoSrv(ctx, req)
-	return &srv, nil
+	service, _ := s.b.UserInfoService(ctx, req)
+	return &service, nil
 }
