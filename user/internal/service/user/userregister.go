@@ -20,6 +20,6 @@ func NewUserRegisterService(bizsrv *biz.UserServiceBizImpl) *RegisterService {
 }
 
 func (s *RegisterService) UserRegisterSrv(ctx context.Context, req *pb.UserRegisterRequest) (*pb.UserRegisterResponse, error) {
-	srv, _ := s.b.UserRegisterSrv(ctx, req)
-	return &srv, nil
+	service, _ := s.b.UserRegisterService(ctx, req)
+	return &service, nil
 }

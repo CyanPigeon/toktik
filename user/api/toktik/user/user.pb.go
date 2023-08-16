@@ -489,12 +489,12 @@ var file_api_toktik_user_user_proto_goTypes = []interface{}{
 }
 var file_api_toktik_user_user_proto_depIdxs = []int32{
 	6, // 0: UserInfoResponse.user:type_name -> User
-	0, // 1: UserInfo.UserInfoSrv:input_type -> UserInfoRequest
-	2, // 2: UserLogin.UserLoginSrv:input_type -> UserLoginRequest
-	4, // 3: UserRegister.UserRegisterSrv:input_type -> UserRegisterRequest
-	1, // 4: UserInfo.UserInfoSrv:output_type -> UserInfoResponse
-	3, // 5: UserLogin.UserLoginSrv:output_type -> UserLoginResponse
-	5, // 6: UserRegister.UserRegisterSrv:output_type -> UserRegisterResponse
+	0, // 1: UserInfo.UserInfoService:input_type -> UserInfoRequest
+	2, // 2: UserLogin.UserLoginService:input_type -> UserLoginRequest
+	4, // 3: UserRegister.UserRegisterService:input_type -> UserRegisterRequest
+	1, // 4: UserInfo.UserInfoService:output_type -> UserInfoResponse
+	3, // 5: UserLogin.UserLoginService:output_type -> UserLoginResponse
+	5, // 6: UserRegister.UserRegisterService:output_type -> UserRegisterResponse
 	4, // [4:7] is the sub-list for method output_type
 	1, // [1:4] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name
