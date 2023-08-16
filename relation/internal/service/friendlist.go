@@ -19,7 +19,7 @@ func NewFriendListService(uc *biz.FollowUsecase) *FriendListService {
 
 func (s *FriendListService) FriendListSrv(ctx context.Context, req *pb.FriendListRequest) (*pb.FriendListResponse, error) {
 	follow := model.Follow{UserUID: req.UserId}
-	list, err := s.uc.GetFollowList(ctx, &follow, biz.QueryTypeFollow)
+	list, err := s.uc.GetFollowList(ctx, &follow, biz.QueryTypeFollower)
 	var msg string
 	if err != nil {
 		msg = err.Error()
