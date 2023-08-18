@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"github.com/go-kratos/kratos/v2/log"
+	"gorm.io/gorm"
 	"relation/internal/biz"
 	"relation/internal/data/model"
 	dao "relation/internal/data/model/dao/follow"
@@ -46,14 +47,19 @@ func (f followRepoImpl) FindFollowList(ctx context.Context, follow *model.Follow
 func (f followRepoImpl) FindRelationExist(ctx context.Context, follow *model.Follow) (bool, error) {
 	query := f.query.Follow.WithContext(ctx)
 
-	find, err := query.Where(f.query.Follow.FollowUID.Eq(follow.FollowUID),
-		f.query.Follow.UserUID.Eq(follow.UserUID), f.query.Follow.Delete.Is(false)).Find()
+	_, err := query.Where(f.query.Follow.FollowUID.Eq(follow.FollowUID),
+		f.query.Follow.UserUID.Eq(follow.UserUID), f.query.Follow.Delete.Is(false)).First()
+
+	//未找到任何记录
+	if errors.Is(err, gorm.ErrRecordNotFound) {
+		return false, nil
+	}
 
 	if err != nil {
 		return false, err
 	}
 
-	return len(find) > 0, nil
+	return true, nil
 
 }
 
