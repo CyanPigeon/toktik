@@ -3,6 +3,7 @@ package biz
 import (
 	"context"
 	"github.com/CyanPigeon/toktik/middleware"
+	"gorm.io/gorm/clause"
 	"user/api/toktik/common"
 	pb "user/api/toktik/user"
 	"user/internal/data"
@@ -37,6 +38,15 @@ func (u *UserServiceBizImpl) UserRegisterService(ctx context.Context, req *pb.Us
 			StatusMsg:  &em,
 		}, nil
 	}
+	q := userDao.Q.WithContext(ctx).User
+	first, _ := q.Where(userDao.Q.User.Username.Eq(req.Username)).First()
+	if first != nil {
+		em = "user exist."
+		return pb.UserRegisterResponse{
+			StatusCode: 101,
+			StatusMsg:  &em,
+		}, nil
+	}
 	err := util.SnowflakeInit(0)
 	if err != nil {
 		em = err.Error()
@@ -45,7 +55,6 @@ func (u *UserServiceBizImpl) UserRegisterService(ctx context.Context, req *pb.Us
 			StatusMsg:  &em,
 		}, err
 	}
-	q := userDao.Q.WithContext(ctx).User
 	uuid := util.GenID()
 	encPassword, err := util.AESEncrypt(req.Password)
 	if err != nil {
@@ -55,7 +64,12 @@ func (u *UserServiceBizImpl) UserRegisterService(ctx context.Context, req *pb.Us
 			StatusMsg:  &em,
 		}, err
 	}
-	err = q.Create(&model.User{
+	c, _ := q.Count()
+	uuid += c
+	u.db.GormDB.Clauses(clause.Locking{
+		Strength: "RowExclusiveLock",
+		Table:    clause.Table{Name: clause.CurrentTable},
+	}).Create(&model.User{
 		UID:      uuid,
 		Username: req.Username,
 		Password: encPassword,
