@@ -14,14 +14,15 @@ import (
 	"google.golang.org/protobuf/encoding/protojson"
 	"os"
 	"relation/internal/conf"
+	"relation/internal/registrar"
 )
 
 // go build -ldflags "-X main.Version=x.y.z"
 var (
 	// Name is the name of the compiled software.
-	Name string
+	Name string = "relation"
 	// Version is the version of the compiled software.
-	Version string
+	Version string = "1.0.0"
 	// flagconf is the config flag.
 	flagconf string
 
@@ -48,17 +49,18 @@ func getConfigPath() string {
 	return config
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, reg *registrar.RegistryConfig) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
+		kratos.Metadata(reg.Metadata),
 		kratos.Logger(logger),
 		kratos.Server(
 			gs,
 			hs,
 		),
+		kratos.Registrar(reg.Registrar),
 	)
 }
 

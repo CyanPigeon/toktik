@@ -12,6 +12,7 @@ import (
 	"relation/internal/biz"
 	"relation/internal/conf"
 	"relation/internal/data"
+	"relation/internal/registrar"
 	"relation/internal/server"
 	"relation/internal/service"
 )
@@ -36,7 +37,12 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	friendListService := service.NewFriendListService(followUsecase)
 	grpcServer := server.NewGRPCServer(confServer, followActionService, followListService, followerListService, friendListService, logger)
 	httpServer := server.NewHTTPServer(confServer, followActionService, followListService, followerListService, friendListService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	registryConfig, err := registrar.NewRegistry()
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	app := newApp(logger, grpcServer, httpServer, registryConfig)
 	return app, func() {
 		cleanup()
 	}, nil

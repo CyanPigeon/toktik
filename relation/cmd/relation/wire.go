@@ -9,6 +9,7 @@ import (
 	"relation/internal/biz"
 	"relation/internal/conf"
 	"relation/internal/data"
+	"relation/internal/registrar"
 	"relation/internal/server"
 	"relation/internal/service"
 
@@ -19,5 +20,5 @@ import (
 
 // wireApp init kratos application.
 func wireApp(*conf.Server, *conf.Data, log.Logger) (*kratos.App, func(), error) {
-	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, newApp))
+	panic(wire.Build(server.ProviderSet, data.ProviderSet, biz.ProviderSet, service.ProviderSet, registrar.ProviderSet, newApp))
 }
