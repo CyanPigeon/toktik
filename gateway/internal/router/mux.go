@@ -16,7 +16,6 @@ import (
 	"github.com/gorilla/mux"
 	std "net/http"
 	"runtime"
-	"strings"
 	"sync"
 )
 
@@ -87,11 +86,7 @@ func (t *MuxRouter) register(endpoint http.Endpoint, nodes []selector.Node) erro
 		endpoint.ServeHTTPEx(writer, request, t.Interceptors)
 		writer.WriteHeader(200)
 	})
-	if strings.HasSuffix(endpoint.Path(), "*") {
-		route = route.PathPrefix(strings.TrimRight(endpoint.Path(), "*"))
-	} else {
-		route = route.Path(endpoint.Path())
-	}
+	route = route.PathPrefix(endpoint.Path())
 	if err := route.GetError(); err != nil {
 		return err
 	}
