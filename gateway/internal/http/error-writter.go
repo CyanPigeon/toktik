@@ -12,8 +12,8 @@ func NewErrorWriter() ErrorWriter {
 	return &defaultErrorWriter{}
 }
 
-func (t *defaultErrorWriter) Write(writer http.ResponseWriter, status int, err error) {
-	writer.WriteHeader(status)
+func (t *defaultErrorWriter) Write(writer http.ResponseWriter, _ int, err error) {
+	writer.WriteHeader(http.StatusOK)
 	writer.Header().Set("Content-Type", "application/json; charset=utf-8")
 	json, e := json2.Marshal(struct {
 		StatusCode int    `json:"status_code,omitempty"`

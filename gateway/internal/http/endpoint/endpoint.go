@@ -113,7 +113,7 @@ func (t *action) forward(writer std.ResponseWriter, request *std.Request) (_ int
 	if err != nil {
 		return std.StatusBadGateway, err
 	}
-
+	_ = request.Body.Close()
 	request.GetBody = func() (io.ReadCloser, error) {
 		return io.NopCloser(bytes.NewReader(body)), nil
 	}
@@ -160,7 +160,6 @@ func (t *action) forward(writer std.ResponseWriter, request *std.Request) (_ int
 	for k, v := range t.response.Header {
 		headers[k] = v
 	}
-	writer.WriteHeader(t.response.StatusCode)
 
 	if t.response.Body == nil {
 		return 200, nil
