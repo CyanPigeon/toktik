@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"user/internal/conf"
+	"user/internal/registrar"
 
 	"github.com/go-kratos/kratos/v2"
 	"github.com/go-kratos/kratos/v2/config"
@@ -19,10 +20,10 @@ import (
 
 // go build -ldflags "-X main.Version=x.y.z"
 var (
-	// Name is the name of the compiled software.
-	Name string
-	// Version is the version of the compiled software.
-	Version string
+	// Name 微服务名称。如果不设置该名称，可能会出现找不到微服务的问题
+	Name string = "CAMB"
+	// Version 微服务版本。
+	Version string = "1.0.0"
 	// flagconf is the config flag.
 	flagconf string
 
@@ -33,17 +34,18 @@ func init() {
 	flag.StringVar(&flagconf, "conf", "../../configs", "config path, eg: -conf config.yaml")
 }
 
-func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server) *kratos.App {
+func newApp(logger log.Logger, gs *grpc.Server, hs *http.Server, reg *registrar.RegistryConfig) *kratos.App {
 	return kratos.New(
 		kratos.ID(id),
 		kratos.Name(Name),
 		kratos.Version(Version),
-		kratos.Metadata(map[string]string{}),
+		kratos.Metadata(reg.Metadata),
 		kratos.Logger(logger),
 		kratos.Server(
 			gs,
 			hs,
 		),
+		kratos.Registrar(reg.Registrar),
 	)
 }
 
