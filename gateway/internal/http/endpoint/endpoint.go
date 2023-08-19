@@ -113,7 +113,7 @@ func (t *action) forward(writer std.ResponseWriter, request *std.Request) (_ int
 	if err != nil {
 		return std.StatusBadGateway, err
 	}
-
+	_ = request.Body.Close()
 	request.GetBody = func() (io.ReadCloser, error) {
 		return io.NopCloser(bytes.NewReader(body)), nil
 	}

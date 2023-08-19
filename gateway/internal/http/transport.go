@@ -70,6 +70,8 @@ func (t *transport) RoundTrip(request *http.Request) (response *http.Response, e
 		t.mutex.Unlock()
 	}()
 	request.RequestURI = ""
+	defer request.Body.Close()
+	request.Body, _ = request.GetBody()
 	response, err = globalHttpClient.Do(request)
 
 	return
