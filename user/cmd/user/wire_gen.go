@@ -12,6 +12,7 @@ import (
 	"user/internal/biz"
 	"user/internal/conf"
 	"user/internal/data"
+	"user/internal/registrar"
 	"user/internal/server"
 	"user/internal/service/user"
 )
@@ -38,7 +39,12 @@ func wireApp(confServer *conf.Server, confData *conf.Data, logger log.Logger) (*
 	infoService := user.NewUserInfoService(userServiceBizImpl)
 	grpcServer := server.NewGRPCServer(confServer, loginService, registerService, infoService, logger)
 	httpServer := server.NewHTTPServer(confServer, loginService, registerService, infoService, logger)
-	app := newApp(logger, grpcServer, httpServer)
+	registryConfig, err := registrar.NewRegistry()
+	if err != nil {
+		cleanup()
+		return nil, nil, err
+	}
+	app := newApp(logger, grpcServer, httpServer, registryConfig)
 	return app, func() {
 		cleanup()
 	}, nil
