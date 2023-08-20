@@ -88,9 +88,6 @@ func RegisterUserLoginHTTPServer(s *http.Server, srv UserLoginHTTPServer) {
 func _UserLogin_UserLoginSrv0_HTTP_Handler(srv UserLoginHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UserLoginRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
@@ -146,9 +143,6 @@ func RegisterUserRegisterHTTPServer(s *http.Server, srv UserRegisterHTTPServer) 
 func _UserRegister_UserRegisterSrv0_HTTP_Handler(srv UserRegisterHTTPServer) func(ctx http.Context) error {
 	return func(ctx http.Context) error {
 		var in UserRegisterRequest
-		if err := ctx.Bind(&in); err != nil {
-			return err
-		}
 		if err := ctx.BindQuery(&in); err != nil {
 			return err
 		}
