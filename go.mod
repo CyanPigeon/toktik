@@ -13,6 +13,7 @@ require (
 	google.golang.org/genproto/googleapis/api v0.0.0-20230629202037-9506855d4529
 	google.golang.org/grpc v1.56.1
 	google.golang.org/protobuf v1.31.0
+	gorm.io/gorm v1.25.4
 )
 
 require (
@@ -32,6 +33,8 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/hashicorp/serf v0.10.1 // indirect
 	github.com/imdario/mergo v0.3.16 // indirect
+	github.com/jinzhu/inflection v1.0.0 // indirect
+	github.com/jinzhu/now v1.1.5 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.17 // indirect
 	github.com/mitchellh/go-homedir v1.1.0 // indirect
